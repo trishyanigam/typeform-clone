@@ -2,10 +2,27 @@
 
 import React, { useState, useEffect, useCallback, use } from 'react';
 import Link from 'next/link';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+
 import BuilderHeader from '../../../components/BuilderHeader';
 import QuestionTypeSelectorModal from '../../../components/QuestionTypeSelectorModal';
 import QuestionEditor from '../../../components/QuestionEditor';
 import ConfirmDeleteModal from '../../../components/ConfirmDeleteModal';
+import { SortableQuestionItem } from '../../../components/SortableQuestionItem';
 import Toast from '../../../components/Toast';
 import { Form, Question, QuestionType, QuestionUpdatePayload, ToastMessage } from '../../../lib/types';
 import * as api from '../../../lib/api';
@@ -38,6 +55,18 @@ export default function BuilderPage({ params }: BuilderPageProps) {
 
   // Toast state
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  // DND Sensors setup
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const showToast = useCallback((message: string, type: 'success' | 'error' | 'info' = 'success') => {
     const id = Math.random().toString(36).substring(2, 9);
@@ -248,6 +277,39 @@ export default function BuilderPage({ params }: BuilderPageProps) {
     }
   };
 
+  // 6. Drag & Drop Reordering Handler
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = questions.findIndex((q) => q.id === active.id);
+    const newIndex = questions.findIndex((q) => q.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
+
+    const previousQuestions = [...questions];
+
+    // Optimistic local update
+    const reordered = arrayMove(questions, oldIndex, newIndex).map((q, idx) => ({
+      ...q,
+      position: idx + 1,
+    }));
+
+    setQuestions(reordered);
+
+    const orderedIds = reordered.map((q) => q.id);
+
+    try {
+      const serverReordered = await api.reorderQuestions(formIdNum, orderedIds);
+      setQuestions(serverReordered);
+    } catch (err: unknown) {
+      // Rollback on failure
+      setQuestions(previousQuestions);
+      const msg = err instanceof Error ? err.message : 'Failed to reorder questions';
+      showToast(msg, 'error');
+    }
+  };
+
   const selectedQuestion = questions.find((q) => q.id === selectedQuestionId);
 
   return (
@@ -329,53 +391,27 @@ export default function BuilderPage({ params }: BuilderPageProps) {
                     </button>
                   </div>
                 ) : (
-                  <div className="space-y-2 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
-                    {questions.map((q) => {
-                      const isSelected = q.id === selectedQuestionId;
-                      return (
-                        <button
-                          key={q.id}
-                          onClick={() => handleSelectQuestion(q.id)}
-                          className={`w-full text-left p-3.5 rounded-xl border transition-all duration-150 flex items-center justify-between gap-3 group ${
-                            isSelected
-                              ? 'bg-zinc-900 text-white border-zinc-900 shadow-sm'
-                              : 'bg-zinc-50/70 hover:bg-zinc-100 border-zinc-200/80 text-zinc-900'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            <span
-                              className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center shrink-0 ${
-                                isSelected ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-700'
-                              }`}
-                            >
-                              {q.position}
-                            </span>
-                            <div className="min-w-0">
-                              <span
-                                className={`text-[10px] font-bold uppercase tracking-wider block ${
-                                  isSelected ? 'text-zinc-300' : 'text-zinc-400'
-                                }`}
-                              >
-                                {q.type.replace('_', ' ')}
-                              </span>
-                              <h3 className="text-xs font-semibold truncate leading-snug">
-                                {q.title}
-                              </h3>
-                            </div>
-                          </div>
-                          {q.required && (
-                            <span
-                              className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                                isSelected ? 'bg-white/10 text-zinc-300' : 'bg-zinc-200 text-zinc-600'
-                              }`}
-                            >
-                              Req
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <SortableContext
+                      items={questions.map((q) => q.id)}
+                      strategy={verticalListSortingStrategy}
+                    >
+                      <div className="space-y-2 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+                        {questions.map((q) => (
+                          <SortableQuestionItem
+                            key={q.id}
+                            question={q}
+                            isSelected={q.id === selectedQuestionId}
+                            onSelect={handleSelectQuestion}
+                          />
+                        ))}
+                      </div>
+                    </SortableContext>
+                  </DndContext>
                 )}
               </div>
             </aside>
