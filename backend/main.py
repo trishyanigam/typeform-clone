@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
 from app.models import Form, Question, Response, Answer
-from app.routes import forms_router, questions_router, public_router
+from app.routes import forms_router, questions_router, public_router, responses_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -29,6 +29,8 @@ app.add_middleware(
 app.include_router(forms_router, prefix="/api")
 app.include_router(questions_router, prefix="/api")
 app.include_router(public_router, prefix="/api/public")
+app.include_router(responses_router, prefix="/api")
+
 
 
 

@@ -101,3 +101,51 @@ export interface ResponseSubmissionResponse {
   response_id: number;
   message: string;
 }
+
+// --- CREATOR RESPONSES / RESULTS TYPES ---
+
+export interface AnswerSimpleResponse {
+  question_id: number;
+  value: string;
+}
+
+export interface AnswerDetailedResponse {
+  question_id: number;
+  question_title: string;
+  question_type: QuestionType;
+  value: string;
+}
+
+export interface ResponseItem {
+  id: number;
+  submitted_at: string;
+  answers: AnswerSimpleResponse[];
+}
+
+export interface ResponseListResponse {
+  form_id: number;
+  total: number;
+  responses: ResponseItem[];
+}
+
+export interface ResponseDetailResponse {
+  id: number;
+  form_id: number;
+  submitted_at: string;
+  answers: AnswerDetailedResponse[];
+}
+
+export interface QuestionStat {
+  question_id: number;
+  question_title: string;
+  type: QuestionType;
+  total_answers: number;
+  average?: number | null;
+  counts?: Record<string, number> | null;
+}
+
+export interface ResponseStatsResponse {
+  form_id: number;
+  total_responses: number;
+  stats: QuestionStat[];
+}

@@ -8,6 +8,9 @@ import {
   PublicForm,
   AnswerItem,
   ResponseSubmissionResponse,
+  ResponseListResponse,
+  ResponseDetailResponse,
+  ResponseStatsResponse,
 } from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
@@ -155,4 +158,24 @@ export async function submitPublicResponse(
     body: JSON.stringify({ answers }),
   });
   return handleResponse<ResponseSubmissionResponse>(response);
+}
+
+// --- CREATOR RESPONSES / RESULTS API ---
+
+export async function fetchFormResponses(formId: number): Promise<ResponseListResponse> {
+  const response = await fetch(`${API_BASE_URL}/forms/${formId}/responses`, { cache: 'no-store' });
+  return handleResponse<ResponseListResponse>(response);
+}
+
+export async function fetchIndividualResponse(
+  formId: number,
+  responseId: number
+): Promise<ResponseDetailResponse> {
+  const response = await fetch(`${API_BASE_URL}/forms/${formId}/responses/${responseId}`, { cache: 'no-store' });
+  return handleResponse<ResponseDetailResponse>(response);
+}
+
+export async function fetchResponseStats(formId: number): Promise<ResponseStatsResponse> {
+  const response = await fetch(`${API_BASE_URL}/forms/${formId}/response-stats`, { cache: 'no-store' });
+  return handleResponse<ResponseStatsResponse>(response);
 }

@@ -192,12 +192,13 @@ export default function FormCard({
           </svg>
         </Link>
 
-        <button
-          onClick={handleResponsesClick}
-          className="px-3 py-2 rounded-xl border border-zinc-200 text-zinc-700 text-xs font-semibold hover:bg-zinc-50 transition-colors"
+        <Link
+          href={`/responses/${form.id}`}
+          className="px-3 py-2 rounded-xl border border-zinc-200 text-zinc-700 text-xs font-semibold hover:bg-zinc-50 transition-colors inline-flex items-center justify-center"
         >
           Responses
-        </button>
+        </Link>
+
       </div>
     </div>
   );
