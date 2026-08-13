@@ -5,6 +5,13 @@ from app.schemas.question import (
     QuestionReorder,
     QuestionResponse,
 )
+from app.schemas.public import (
+    PublicFormResponse,
+    PublicQuestionResponse,
+    AnswerSubmission,
+    ResponseSubmissionRequest,
+    ResponseSubmissionResult,
+)
 
 __all__ = [
     "FormCreate",
@@ -14,5 +21,11 @@ __all__ = [
     "QuestionUpdate",
     "QuestionReorder",
     "QuestionResponse",
+    "PublicFormResponse",
+    "PublicQuestionResponse",
+    "AnswerSubmission",
+    "ResponseSubmissionRequest",
+    "ResponseSubmissionResult",
 ]
+
 

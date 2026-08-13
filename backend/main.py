@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
 from app.models import Form, Question, Response, Answer
-from app.routes import forms_router, questions_router
+from app.routes import forms_router, questions_router, public_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -26,8 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(forms_router, prefix="/api", tags=["forms"])
-app.include_router(questions_router, prefix="/api", tags=["questions"])
+app.include_router(forms_router, prefix="/api")
+app.include_router(questions_router, prefix="/api")
+app.include_router(public_router, prefix="/api/public")
+
 
 
 @app.get("/")
@@ -35,5 +37,6 @@ def root():
     return {
         "message": "Typeform Clone API is running"
     }
+
 
 
