@@ -18,6 +18,51 @@ export interface FormUpdatePayload {
   title: string;
 }
 
+export type QuestionType =
+  | 'short_text'
+  | 'long_text'
+  | 'multiple_choice'
+  | 'dropdown'
+  | 'email'
+  | 'number'
+  | 'yes_no'
+  | 'rating';
+
+export interface QuestionSettings {
+  options?: string[];
+  max?: number;
+  [key: string]: any;
+}
+
+export interface Question {
+  id: number;
+  form_id: number;
+  type: QuestionType;
+  title: string;
+  description: string | null;
+  required: boolean;
+  position: number;
+  settings: QuestionSettings | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface QuestionCreatePayload {
+  type: QuestionType;
+  title: string;
+  description?: string | null;
+  required?: boolean;
+  settings?: QuestionSettings | null;
+}
+
+export interface QuestionUpdatePayload {
+  type?: QuestionType;
+  title?: string;
+  description?: string | null;
+  required?: boolean;
+  settings?: QuestionSettings | null;
+}
+
 export interface ToastMessage {
   id: string;
   type: 'success' | 'error' | 'info';

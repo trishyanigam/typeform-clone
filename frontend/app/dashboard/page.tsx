@@ -253,11 +253,15 @@ export default function DashboardPage() {
 
       <ConfirmDeleteModal
         form={deletingForm}
+        itemType="Form"
         isOpen={!!deletingForm}
         onClose={() => setDeletingForm(null)}
-        onConfirm={handleDeleteForm}
+        onConfirm={async () => {
+          if (deletingForm) await handleDeleteForm(deletingForm.id);
+        }}
         loading={actionLoading}
       />
+
 
       {/* Toast Notification Container */}
       <Toast toasts={toasts} onDismiss={dismissToast} />

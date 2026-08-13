@@ -4,25 +4,27 @@ import React from 'react';
 import { Form } from '../lib/types';
 
 interface ConfirmDeleteModalProps {
-  form: Form | null;
+  title?: string;
+  itemType?: string;
+  form?: Form | null;
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (id: number) => Promise<void>;
+  onConfirm: () => Promise<void>;
   loading: boolean;
 }
 
 export default function ConfirmDeleteModal({
+  title,
+  itemType = 'item',
   form,
   isOpen,
   onClose,
   onConfirm,
   loading,
 }: ConfirmDeleteModalProps) {
-  if (!isOpen || !form) return null;
+  if (!isOpen) return null;
 
-  const handleConfirm = async () => {
-    await onConfirm(form.id);
-  };
+  const displayTitle = title || form?.title || 'item';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/40 backdrop-blur-sm animate-fade-in">
@@ -37,13 +39,13 @@ export default function ConfirmDeleteModal({
             </svg>
           </div>
           <div>
-            <h2 className="text-lg font-bold text-zinc-900 tracking-tight">Delete form</h2>
+            <h2 className="text-lg font-bold text-zinc-900 tracking-tight">Delete {itemType}</h2>
             <p className="text-xs text-zinc-500">This action cannot be undone</p>
           </div>
         </div>
 
         <div className="py-4 text-sm text-zinc-600">
-          Are you sure you want to delete <span className="font-semibold text-zinc-900">&ldquo;{form.title}&rdquo;</span>? All associated questions and responses will be permanently removed.
+          Are you sure you want to delete <span className="font-semibold text-zinc-900">&ldquo;{displayTitle}&rdquo;</span>?
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-3 border-t border-zinc-100">
@@ -57,7 +59,7 @@ export default function ConfirmDeleteModal({
           </button>
           <button
             type="button"
-            onClick={handleConfirm}
+            onClick={onConfirm}
             disabled={loading}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
           >
@@ -67,7 +69,7 @@ export default function ConfirmDeleteModal({
                 <span>Deleting...</span>
               </>
             ) : (
-              <span>Delete Form</span>
+              <span>Delete {itemType}</span>
             )}
           </button>
         </div>

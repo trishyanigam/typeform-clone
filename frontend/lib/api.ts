@@ -1,4 +1,11 @@
-import { Form, FormCreatePayload, FormUpdatePayload } from './types';
+import {
+  Form,
+  FormCreatePayload,
+  FormUpdatePayload,
+  Question,
+  QuestionCreatePayload,
+  QuestionUpdatePayload,
+} from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -23,6 +30,8 @@ async function handleResponse<T>(response: Response): Promise<T> {
   }
   return response.json();
 }
+
+// --- FORMS API ---
 
 export async function fetchForms(): Promise<Form[]> {
   const response = await fetch(`${API_BASE_URL}/forms`, { cache: 'no-store' });
@@ -78,4 +87,50 @@ export async function unpublishForm(id: number): Promise<Form> {
     method: 'POST',
   });
   return handleResponse<Form>(response);
+}
+
+// --- QUESTIONS API ---
+
+export async function fetchQuestions(formId: number): Promise<Question[]> {
+  const response = await fetch(`${API_BASE_URL}/forms/${formId}/questions`, { cache: 'no-store' });
+  return handleResponse<Question[]>(response);
+}
+
+export async function createQuestion(formId: number, payload: QuestionCreatePayload): Promise<Question> {
+  const response = await fetch(`${API_BASE_URL}/forms/${formId}/questions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  return handleResponse<Question>(response);
+}
+
+export async function fetchQuestion(questionId: number): Promise<Question> {
+  const response = await fetch(`${API_BASE_URL}/questions/${questionId}`, { cache: 'no-store' });
+  return handleResponse<Question>(response);
+}
+
+export async function updateQuestion(questionId: number, payload: QuestionUpdatePayload): Promise<Question> {
+  const response = await fetch(`${API_BASE_URL}/questions/${questionId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  return handleResponse<Question>(response);
+}
+
+export async function deleteQuestion(questionId: number): Promise<{ message: string }> {
+  const response = await fetch(`${API_BASE_URL}/questions/${questionId}`, {
+    method: 'DELETE',
+  });
+  return handleResponse<{ message: string }>(response);
+}
+
+export async function reorderQuestions(formId: number, questionIds: number[]): Promise<Question[]> {
+  const response = await fetch(`${API_BASE_URL}/forms/${formId}/questions/reorder`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question_ids: questionIds }),
+  });
+  return handleResponse<Question[]>(response);
 }
