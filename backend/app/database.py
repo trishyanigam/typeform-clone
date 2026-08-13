@@ -26,4 +26,13 @@ SessionLocal = sessionmaker(
 
 
 class Base(DeclarativeBase):
-    pass
+    pass
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
