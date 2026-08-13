@@ -1,6 +1,7 @@
 from datetime import datetime
+from typing import List
 
-from sqlalchemy import DateTime, String
+from sqlalchemy import DateTime, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -18,30 +19,32 @@ class Form(Base):
         index=True
     )
     status: Mapped[str] = mapped_column(
-        String(20),
+        String(50),
         default="draft",
         nullable=False
     )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=func.now(),
+        nullable=False
     )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow
+        default=func.now(),
+        onupdate=func.now(),
+        nullable=False
     )
 
-    questions = relationship(
+    questions: Mapped[List["Question"]] = relationship(
         "Question",
         back_populates="form",
         cascade="all, delete-orphan"
     )
 
-    responses = relationship(
+    responses: Mapped[List["Response"]] = relationship(
         "Response",
         back_populates="form",
         cascade="all, delete-orphan"
-    )
+    )

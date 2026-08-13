@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy import ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -24,17 +26,17 @@ class Answer(Base):
         index=True
     )
 
-    value: Mapped[str | None] = mapped_column(
+    value: Mapped[Optional[str]] = mapped_column(
         Text,
         nullable=True
     )
 
-    response = relationship(
+    response: Mapped["Response"] = relationship(
         "Response",
         back_populates="answers"
     )
 
-    question = relationship(
+    question: Mapped["Question"] = relationship(
         "Question",
         back_populates="answers"
-    )
+    )

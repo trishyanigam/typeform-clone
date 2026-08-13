@@ -1,6 +1,7 @@
 from datetime import datetime
+from typing import List
 
-from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -22,16 +23,17 @@ class Response(Base):
 
     submitted_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=func.now(),
+        nullable=False
     )
 
-    form = relationship(
+    form: Mapped["Form"] = relationship(
         "Form",
         back_populates="responses"
     )
 
-    answers = relationship(
+    answers: Mapped[List["Answer"]] = relationship(
         "Answer",
         back_populates="response",
         cascade="all, delete-orphan"
-    )
+    )

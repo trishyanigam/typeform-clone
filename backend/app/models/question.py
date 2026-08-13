@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict, List, Optional
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, JSON, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, JSON, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -28,7 +28,7 @@ class Question(Base):
         nullable=False
     )
 
-    description: Mapped[str | None] = mapped_column(
+    description: Mapped[Optional[str]] = mapped_column(
         Text,
         nullable=True
     )
@@ -44,28 +44,31 @@ class Question(Base):
         nullable=False
     )
 
-    settings: Mapped[dict[str, Any] | None] = mapped_column(
+    settings: Mapped[Optional[Dict[str, Any]]] = mapped_column(
         JSON,
         nullable=True
     )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=func.now(),
+        nullable=False
     )
 
     updated_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow
+        default=func.now(),
+        onupdate=func.now(),
+        nullable=False
     )
 
-    form = relationship(
+    form: Mapped["Form"] = relationship(
         "Form",
         back_populates="questions"
     )
 
-    answers = relationship(
+    answers: Mapped[List["Answer"]] = relationship(
         "Answer",
-        back_populates="question"
-    )
+        back_populates="question",
+        cascade="all, delete-orphan"
+    )
