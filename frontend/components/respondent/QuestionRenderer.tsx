@@ -55,7 +55,7 @@ export default function QuestionRenderer({
   const ratingMax = question.settings?.max || 5;
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center min-h-[60vh] py-8 px-4">
+    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center min-h-[55vh] py-6 px-4">
       {/* Question Number Badge & Title */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
@@ -69,12 +69,12 @@ export default function QuestionRenderer({
           )}
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight leading-tight">
+        <h2 className="text-2xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight leading-tight">
           {question.title}
         </h2>
 
         {question.description && (
-          <p className="mt-2 text-sm sm:text-base text-zinc-500 font-medium leading-relaxed">
+          <p className="mt-2.5 text-base sm:text-lg text-zinc-500 font-medium leading-relaxed">
             {question.description}
           </p>
         )}
@@ -91,7 +91,7 @@ export default function QuestionRenderer({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your answer here..."
-            className="w-full text-xl sm:text-2xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
+            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
           />
         )}
 
@@ -107,7 +107,7 @@ export default function QuestionRenderer({
               rows={4}
               className="w-full text-lg font-medium p-4 border-2 border-zinc-200 rounded-2xl bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900 focus:bg-white transition-all resize-none shadow-sm"
             />
-            <p className="mt-2 text-xs font-medium text-zinc-400">
+            <p className="mt-2.5 text-xs font-medium text-zinc-400">
               Press <kbd className="px-1.5 py-0.5 bg-zinc-100 border border-zinc-300 rounded text-zinc-700 font-mono text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-zinc-100 border border-zinc-300 rounded text-zinc-700 font-mono text-[10px]">Enter ↵</kbd> to submit answer
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function QuestionRenderer({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="name@example.com"
-            className="w-full text-xl sm:text-2xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
+            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
           />
         )}
 
@@ -135,7 +135,7 @@ export default function QuestionRenderer({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="0"
-            className="w-full text-xl sm:text-2xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
+            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
           />
         )}
 
@@ -153,7 +153,7 @@ export default function QuestionRenderer({
                   className={`w-full p-4 rounded-2xl border-2 text-left flex items-center gap-4 transition-all duration-150 group ${
                     isSelected
                       ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
-                      : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
+                      : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50/80 text-zinc-900'
                   }`}
                 >
                   <span
@@ -205,7 +205,7 @@ export default function QuestionRenderer({
                   className={`p-5 rounded-2xl border-2 text-left flex items-center justify-between transition-all duration-150 group ${
                     isSelected
                       ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
-                      : 'border-zinc-200 bg-white hover:border-zinc-400 text-zinc-900'
+                      : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50/80 text-zinc-900'
                   }`}
                 >
                   <span className="text-lg font-bold">{item.label}</span>
@@ -227,7 +227,7 @@ export default function QuestionRenderer({
         {/* 8. Rating */}
         {question.type === 'rating' && (
           <div>
-            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <div className="flex items-center gap-2.5 sm:gap-3.5 flex-wrap">
               {Array.from({ length: ratingMax }, (_, i) => i + 1).map((starVal) => {
                 const isSelected = Number(value) === starVal;
                 return (
@@ -269,7 +269,7 @@ export default function QuestionRenderer({
           type="button"
           onClick={onNext}
           disabled={submitting}
-          className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-zinc-900 text-white font-bold text-base hover:bg-zinc-800 active:scale-[0.98] transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 disabled:opacity-50"
+          className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-zinc-900 text-white font-bold text-base hover:bg-black active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 disabled:opacity-50"
         >
           {submitting ? (
             <>

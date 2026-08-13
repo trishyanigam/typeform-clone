@@ -39,6 +39,8 @@ export default function BuilderPage({ params }: BuilderPageProps) {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(null);
 
+  const [activeTab, setActiveTab] = useState<'questions' | 'settings'>('questions');
+
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [savingQuestion, setSavingQuestion] = useState<boolean>(false);
@@ -321,6 +323,8 @@ export default function BuilderPage({ params }: BuilderPageProps) {
           onPublishToggle={handlePublishToggle}
           onShowToast={showToast}
           publishing={publishingForm}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
         />
       )}
 
@@ -358,102 +362,183 @@ export default function BuilderPage({ params }: BuilderPageProps) {
         </div>
       )}
 
-      {/* Main Two-Column Layout */}
+      {/* Main Content Area */}
       {!loading && form && (
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-            {/* LEFT COLUMN: Question Sidebar */}
-            <aside className="md:col-span-4 lg:col-span-4 space-y-4">
-              <div className="bg-white p-4 rounded-2xl border border-zinc-200 shadow-sm">
-                <div className="flex items-center justify-between pb-3 border-b border-zinc-100 mb-3">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
-                    Questions ({questions.length})
-                  </h2>
-                  <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span>Add question</span>
-                  </button>
-                </div>
-
-                {questions.length === 0 ? (
-                  <div className="py-8 text-center px-4">
-                    <p className="text-xs text-zinc-500 mb-3">No questions added yet.</p>
+          {/* TAB 1: QUESTIONS BUILDER VIEW */}
+          {activeTab === 'questions' && (
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+              {/* LEFT COLUMN: Question Sidebar */}
+              <aside className="md:col-span-4 lg:col-span-4 space-y-4">
+                <div className="bg-white p-4 rounded-2xl border border-zinc-200 shadow-sm">
+                  <div className="flex items-center justify-between pb-3 border-b border-zinc-100 mb-3">
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                      Questions ({questions.length})
+                    </h2>
                     <button
                       onClick={() => setIsAddModalOpen(true)}
-                      className="text-xs font-semibold text-zinc-900 underline hover:text-black"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors"
                     >
-                      Click here to add your first question
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      <span>Add question</span>
                     </button>
                   </div>
-                ) : (
-                  <DndContext
-                    sensors={sensors}
-                    collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
-                  >
-                    <SortableContext
-                      items={questions.map((q) => q.id)}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      <div className="space-y-2 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
-                        {questions.map((q) => (
-                          <SortableQuestionItem
-                            key={q.id}
-                            question={q}
-                            isSelected={q.id === selectedQuestionId}
-                            onSelect={handleSelectQuestion}
-                          />
-                        ))}
-                      </div>
-                    </SortableContext>
-                  </DndContext>
-                )}
-              </div>
-            </aside>
 
-            {/* RIGHT COLUMN: Question Editor */}
-            <section className="md:col-span-8 lg:col-span-8">
-              {selectedQuestion ? (
-                <QuestionEditor
-                  key={selectedQuestion.id}
-                  question={selectedQuestion}
-                  onSave={handleSaveQuestion}
-                  onDelete={(id) => {
-                    const qToDelete = questions.find((q) => q.id === id);
-                    if (qToDelete) setDeletingQuestion(qToDelete);
-                  }}
-                  saving={savingQuestion}
-                  onDirtyChange={setIsEditorDirty}
-                />
-              ) : (
-                <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-12 text-center flex flex-col items-center justify-center min-h-[500px]">
-                  <div className="w-16 h-16 rounded-2xl bg-zinc-100 border border-zinc-200 text-zinc-400 flex items-center justify-center mb-4">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                  {questions.length === 0 ? (
+                    <div className="py-8 text-center px-4">
+                      <p className="text-xs text-zinc-500 mb-3">No questions added yet.</p>
+                      <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="text-xs font-semibold text-zinc-900 underline hover:text-black"
+                      >
+                        Click here to add your first question
+                      </button>
+                    </div>
+                  ) : (
+                    <DndContext
+                      sensors={sensors}
+                      collisionDetection={closestCenter}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <SortableContext
+                        items={questions.map((q) => q.id)}
+                        strategy={verticalListSortingStrategy}
+                      >
+                        <div className="space-y-2 max-h-[calc(100vh-220px)] overflow-y-auto pr-1">
+                          {questions.map((q) => (
+                            <SortableQuestionItem
+                              key={q.id}
+                              question={q}
+                              isSelected={q.id === selectedQuestionId}
+                              onSelect={handleSelectQuestion}
+                            />
+                          ))}
+                        </div>
+                      </SortableContext>
+                    </DndContext>
+                  )}
+                </div>
+              </aside>
+
+              {/* RIGHT COLUMN: Question Editor */}
+              <section className="md:col-span-8 lg:col-span-8">
+                {selectedQuestion ? (
+                  <QuestionEditor
+                    key={selectedQuestion.id}
+                    question={selectedQuestion}
+                    onSave={handleSaveQuestion}
+                    onDelete={(id) => {
+                      const qToDelete = questions.find((q) => q.id === id);
+                      if (qToDelete) setDeletingQuestion(qToDelete);
+                    }}
+                    saving={savingQuestion}
+                    onDirtyChange={setIsEditorDirty}
+                  />
+                ) : (
+                  <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-12 text-center flex flex-col items-center justify-center min-h-[500px]">
+                    <div className="w-16 h-16 rounded-2xl bg-zinc-100 border border-zinc-200 text-zinc-400 flex items-center justify-center mb-4">
+                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold text-zinc-900 tracking-tight mb-1">No question selected</h3>
+                    <p className="text-xs text-zinc-500 max-w-sm mb-6">
+                      Select a question from the left sidebar to edit its settings, or create a new question.
+                    </p>
+                    <button
+                      onClick={() => setIsAddModalOpen(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      <span>Add a question</span>
+                    </button>
                   </div>
-                  <h3 className="text-lg font-bold text-zinc-900 tracking-tight mb-1">No question selected</h3>
-                  <p className="text-xs text-zinc-500 max-w-sm mb-6">
-                    Select a question from the left sidebar to edit its settings, or create a new question.
-                  </p>
+                )}
+              </section>
+            </div>
+          )}
+
+          {/* TAB 2: SETTINGS PLACEHOLDER VIEW */}
+          {activeTab === 'settings' && (
+            <div className="max-w-3xl mx-auto space-y-6">
+              {/* SECTION 1: Appearance / Theme */}
+              <div className="bg-white p-6 sm:p-8 rounded-2xl border border-zinc-200 shadow-sm space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-0.5">
+                      Appearance
+                    </span>
+                    <h2 className="text-lg font-bold text-zinc-900 tracking-tight">Theme</h2>
+                    <p className="text-xs text-zinc-500 mt-0.5">
+                      Customize colors, fonts and background.
+                    </p>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-600 text-[10px] font-bold uppercase tracking-wider">
+                    Coming Soon
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-200/80 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-zinc-900 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      Aa
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-zinc-900 block">Default theme</span>
+                      <span className="text-[11px] text-zinc-500 block">Minimalist white canvas with dark typography</span>
+                    </div>
+                  </div>
+
                   <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors"
+                    disabled
+                    className="px-3.5 py-1.5 rounded-lg bg-zinc-200 text-zinc-500 text-xs font-semibold cursor-not-allowed shrink-0"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <span>Add a question</span>
+                    Coming Soon
                   </button>
                 </div>
-              )}
-            </section>
-          </div>
+              </div>
+
+              {/* SECTION 2: Thank-you screen */}
+              <div className="bg-white p-6 sm:p-8 rounded-2xl border border-zinc-200 shadow-sm space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-0.5">
+                      Submission Experience
+                    </span>
+                    <h2 className="text-lg font-bold text-zinc-900 tracking-tight">Thank-you screen</h2>
+                    <p className="text-xs text-zinc-500 mt-0.5">
+                      Customize the screen respondents see after submitting the form.
+                    </p>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-600 text-[10px] font-bold uppercase tracking-wider">
+                    Coming Soon
+                  </span>
+                </div>
+
+                <div className="p-5 rounded-xl bg-zinc-50 border border-zinc-200/80 text-center space-y-2">
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-sm font-bold">
+                    ✓
+                  </div>
+                  <h4 className="text-xs font-bold text-zinc-800">Default Thank You Screen</h4>
+                  <p className="text-[11px] text-zinc-500 max-w-xs mx-auto">
+                    &ldquo;Thanks for completing this form. Your response has been recorded.&rdquo;
+                  </p>
+                  <div className="pt-2">
+                    <button
+                      disabled
+                      className="px-3.5 py-1.5 rounded-lg bg-zinc-200 text-zinc-500 text-xs font-semibold cursor-not-allowed inline-block"
+                    >
+                      Coming Soon
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </main>
       )}
 

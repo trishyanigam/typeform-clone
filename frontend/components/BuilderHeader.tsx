@@ -11,6 +11,8 @@ interface BuilderHeaderProps {
   onPublishToggle: () => Promise<void>;
   onShowToast: (message: string, type: 'info' | 'success' | 'error') => void;
   publishing: boolean;
+  activeTab: 'questions' | 'settings';
+  onTabChange: (tab: 'questions' | 'settings') => void;
 }
 
 export default function BuilderHeader({
@@ -19,6 +21,8 @@ export default function BuilderHeader({
   onPublishToggle,
   onShowToast,
   publishing,
+  activeTab,
+  onTabChange,
 }: BuilderHeaderProps) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [titleInput, setTitleInput] = useState(form.title);
@@ -53,7 +57,7 @@ export default function BuilderHeader({
   return (
     <>
       <header className="border-b border-zinc-200 bg-white/90 backdrop-blur-md sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
           {/* Left: Back Link & Form Title */}
           <div className="flex items-center gap-3 min-w-0">
             <Link
@@ -108,6 +112,30 @@ export default function BuilderHeader({
                 {form.status}
               </span>
             </div>
+          </div>
+
+          {/* Center: Questions / Settings Tab Switcher */}
+          <div className="flex items-center gap-1 bg-zinc-100/90 p-1 rounded-xl border border-zinc-200/80">
+            <button
+              onClick={() => onTabChange('questions')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'questions'
+                  ? 'bg-white text-zinc-900 shadow-sm'
+                  : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              Questions
+            </button>
+            <button
+              onClick={() => onTabChange('settings')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === 'settings'
+                  ? 'bg-white text-zinc-900 shadow-sm'
+                  : 'text-zinc-500 hover:text-zinc-900'
+              }`}
+            >
+              Settings
+            </button>
           </div>
 
           {/* Right: Share, Preview & Publish Buttons */}
