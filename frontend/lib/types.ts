@@ -68,3 +68,36 @@ export interface ToastMessage {
   type: 'success' | 'error' | 'info';
   message: string;
 }
+
+// --- PUBLIC RESPONDENT TYPES ---
+
+export interface PublicQuestion {
+  id: number;
+  type: QuestionType;
+  title: string;
+  description: string | null;
+  required: boolean;
+  position: number;
+  settings: QuestionSettings | null;
+}
+
+export interface PublicForm {
+  id: number;
+  title: string;
+  slug: string;
+  questions: PublicQuestion[];
+}
+
+export interface AnswerItem {
+  question_id: number;
+  value: any;
+}
+
+export interface ResponseSubmissionPayload {
+  answers: AnswerItem[];
+}
+
+export interface ResponseSubmissionResponse {
+  response_id: number;
+  message: string;
+}

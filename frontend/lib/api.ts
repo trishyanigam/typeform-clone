@@ -5,6 +5,9 @@ import {
   Question,
   QuestionCreatePayload,
   QuestionUpdatePayload,
+  PublicForm,
+  AnswerItem,
+  ResponseSubmissionResponse,
 } from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
@@ -133,4 +136,23 @@ export async function reorderQuestions(formId: number, questionIds: number[]): P
     body: JSON.stringify({ question_ids: questionIds }),
   });
   return handleResponse<Question[]>(response);
+}
+
+// --- PUBLIC RESPONDENT API ---
+
+export async function fetchPublicForm(slug: string): Promise<PublicForm> {
+  const response = await fetch(`${API_BASE_URL}/public/forms/${slug}`, { cache: 'no-store' });
+  return handleResponse<PublicForm>(response);
+}
+
+export async function submitPublicResponse(
+  slug: string,
+  answers: AnswerItem[]
+): Promise<ResponseSubmissionResponse> {
+  const response = await fetch(`${API_BASE_URL}/public/forms/${slug}/responses`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ answers }),
+  });
+  return handleResponse<ResponseSubmissionResponse>(response);
 }
