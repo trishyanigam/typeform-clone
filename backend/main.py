@@ -18,6 +18,7 @@ app = FastAPI(
 
 origins = [
     "http://localhost:3000",
+    "https://typeform-clone-beta-puce.vercel.app",
 ]
 
 frontend_url = os.getenv("FRONTEND_URL")
@@ -47,4 +48,4 @@ def root():
     }
 
 
-
+
