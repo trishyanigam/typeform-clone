@@ -307,14 +307,14 @@ export default function QuestionEditor({
           </div>
         </div>
 
-        {/* Delete Question Action */}
-        <div className="pt-4 border-t border-zinc-100 mt-4">
+        {/* Delete Question & Save Changes Actions */}
+        <div className="pt-4 border-t border-zinc-100 mt-4 flex items-center justify-between gap-3 flex-wrap">
           <button
             type="button"
             onClick={() => onDelete(question.id)}
-            className="px-3 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-xs font-semibold transition-colors flex items-center gap-1"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-xs font-semibold transition-colors shrink-0 cursor-pointer"
           >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
             <span>Delete</span>
@@ -323,7 +323,7 @@ export default function QuestionEditor({
           <button
             type="submit"
             disabled={saving || !isDirty}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-[#262627] text-white text-xs font-semibold hover:bg-black transition-colors disabled:opacity-50 shadow-xs"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#262627] text-white text-xs font-semibold hover:bg-black transition-colors disabled:opacity-50 shadow-xs cursor-pointer shrink-0"
           >
             {saving ? (
               <>
@@ -336,6 +336,7 @@ export default function QuestionEditor({
           </button>
         </div>
       </form>
+
     </div>
   );
 }

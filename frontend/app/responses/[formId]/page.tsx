@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, use } from 'react';
 import Link from 'next/link';
 import {
   Form,
+  Question,
   ResponseItem,
   QuestionStat,
   ToastMessage,
@@ -21,11 +22,13 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
   const formIdNum = parseInt(resolvedParams.formId, 10);
 
   const [form, setForm] = useState<Form | null>(null);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [responses, setResponses] = useState<ResponseItem[]>([]);
   const [totalResponses, setTotalResponses] = useState<number>(0);
   const [stats, setStats] = useState<QuestionStat[]>([]);
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [exportingCsv, setExportingCsv] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'submissions' | 'stats'>('submissions');
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
@@ -55,16 +58,18 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
     try {
       setLoading(true);
       setError(null);
-      const [formData, responsesData, statsData] = await Promise.all([
+      const [formData, responsesData, statsData, questionsData] = await Promise.all([
         api.fetchForm(formIdNum),
         api.fetchFormResponses(formIdNum),
         api.fetchResponseStats(formIdNum),
+        api.fetchQuestions(formIdNum).catch(() => []),
       ]);
 
       setForm(formData);
       setResponses(responsesData.responses);
       setTotalResponses(responsesData.total);
       setStats(statsData.stats);
+      setQuestions(questionsData);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -79,6 +84,81 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const handleExportCsv = () => {
+    if (!responses || responses.length === 0) {
+      showToast('No responses available to export', 'info');
+      return;
+    }
+
+    setExportingCsv(true);
+
+    try {
+      // 1. Determine question columns in position order
+      const questionList = questions.length > 0
+        ? questions.map((q) => ({ id: q.id, title: q.title }))
+        : stats.map((s) => ({ id: s.question_id, title: s.question_title }));
+
+      // 2. CSV Header row
+      const headers = ['Response ID', 'Submitted At', ...questionList.map((q) => q.title)];
+      const csvRows: string[] = [];
+
+      // Helper to format a single cell with proper CSV escaping (RFC 4180)
+      const escapeCsvCell = (cellValue: any): string => {
+        if (cellValue === null || cellValue === undefined) {
+          return '""';
+        }
+        const str = String(cellValue).replace(/"/g, '""');
+        return `"${str}"`;
+      };
+
+      // Add header row
+      csvRows.push(headers.map(escapeCsvCell).join(','));
+
+      // 3. Add data rows for each response
+      for (const resp of responses) {
+        const rowCells: string[] = [
+          String(resp.id),
+          resp.submitted_at ? new Date(resp.submitted_at).toISOString() : '',
+        ];
+
+        // Map answers for each question
+        const answerMap = new Map<number, string>();
+        if (resp.answers && Array.isArray(resp.answers)) {
+          for (const ans of resp.answers) {
+            answerMap.set(ans.question_id, ans.value !== undefined && ans.value !== null ? String(ans.value) : '');
+          }
+        }
+
+        for (const q of questionList) {
+          const val = answerMap.get(q.id) ?? '';
+          rowCells.push(val);
+        }
+
+        csvRows.push(rowCells.map(escapeCsvCell).join(','));
+      }
+
+      // 4. Create Blob and trigger download
+      const csvString = csvRows.join('\r\n');
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const safeTitle = (form?.title || 'form').replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      link.href = url;
+      link.setAttribute('download', `${safeTitle}_responses.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast('Responses exported to CSV successfully!', 'success');
+    } catch (err) {
+      console.error('Error exporting CSV:', err);
+      showToast('Failed to export responses to CSV', 'error');
+    } finally {
+      setExportingCsv(false);
+    }
+  };
 
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return 'N/A';
@@ -142,6 +222,19 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
+              {/* Export CSV Button */}
+              <button
+                onClick={handleExportCsv}
+                disabled={totalResponses === 0 || exportingCsv}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 bg-white text-[#262627] text-xs font-semibold hover:bg-zinc-50 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-2xs"
+                title={totalResponses === 0 ? "No responses to export" : "Export responses to CSV"}
+              >
+                <svg className="w-3.5 h-3.5 text-zinc-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                <span>{exportingCsv ? 'Exporting...' : 'Export CSV'}</span>
+              </button>
+
               {form.status === 'published' && (
                 <button
                   onClick={() => setIsShareModalOpen(true)}
@@ -164,6 +257,7 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
           </div>
         </header>
       )}
+
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
