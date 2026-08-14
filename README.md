@@ -11,6 +11,18 @@ respondent flow, response analytics, and CSV export.
 **Database:** SQLite / SQLAlchemy\
 **Deployment:** Vercel + PythonAnywhere
 
+## Live Demo
+
+**Frontend:** https://typeform-clone-beta-puce.vercel.app/
+
+**Backend API:** https://trishya1101.pythonanywhere.com/
+
+## Project Links
+
+- **Live Application:** https://typeform-clone-beta-puce.vercel.app/
+- **GitHub Repository:** https://github.com/trishyanigam/typeform-clone
+- **Backend API:** https://trishya1101.pythonanywhere.com/
+
 ------------------------------------------------------------------------
 
 ## Table of Contents
@@ -390,7 +402,7 @@ Typical fields include:
 ## 1. Clone the Repository
 
 ``` bash
-git clone <your-repository-url>
+git clone https://github.com/trishyanigam/typeform-clone.git
 cd typeform-clone
 ```
 
@@ -797,7 +809,7 @@ Production configuration should point the frontend API variable to the
 deployed backend:
 
 ``` env
-NEXT_PUBLIC_API_URL=<production-backend-url>
+NEXT_PUBLIC_API_URL=https://trishya1101.pythonanywhere.com/api
 ```
 
 ## Backend
