@@ -35,12 +35,12 @@ export function SortableQuestionItem({
       ref={setNodeRef}
       style={style}
       onClick={() => onSelect(question.id)}
-      className={`w-full p-3 rounded-xl border transition-all duration-150 flex items-center justify-between gap-2.5 group cursor-pointer ${
+      className={`w-full p-2.5 rounded-lg border transition-all duration-150 flex items-center justify-between gap-2 group cursor-pointer ${
         isDragging
-          ? 'opacity-40 border-dashed border-zinc-400 bg-zinc-100 shadow-lg z-20 scale-[1.02]'
+          ? 'opacity-40 border-dashed border-zinc-400 bg-zinc-100 shadow-md z-20'
           : isSelected
-          ? 'bg-zinc-900 text-white border-zinc-900 shadow-sm'
-          : 'bg-zinc-50/70 hover:bg-zinc-100 border-zinc-200/80 text-zinc-900'
+          ? 'bg-[#e8e8e7] border-[#262627] text-[#262627] font-semibold'
+          : 'bg-white hover:bg-zinc-50 border-[#e5e5e5] text-zinc-700'
       }`}
     >
       <div className="flex items-center gap-2 min-w-0">
@@ -50,47 +50,38 @@ export function SortableQuestionItem({
           {...attributes}
           {...listeners}
           aria-label="Drag to reorder question"
-          className={`p-1 rounded cursor-grab active:cursor-grabbing hover:bg-black/10 focus:outline-none shrink-0 ${
-            isSelected ? 'text-zinc-400 hover:text-white' : 'text-zinc-400 hover:text-zinc-700'
-          }`}
+          className="p-0.5 rounded cursor-grab active:cursor-grabbing text-zinc-400 hover:text-zinc-700 focus:outline-none shrink-0"
           onClick={(e) => e.stopPropagation()}
         >
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M9 7.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm6-9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 4.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
           </svg>
         </button>
 
         <span
-          className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center shrink-0 ${
-            isSelected ? 'bg-white/20 text-white' : 'bg-zinc-200 text-zinc-700'
+          className={`w-5 h-5 rounded text-[11px] font-bold flex items-center justify-center shrink-0 ${
+            isSelected ? 'bg-[#262627] text-white' : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
           }`}
         >
           {question.position}
         </span>
 
         <div className="min-w-0">
-          <span
-            className={`text-[10px] font-bold uppercase tracking-wider block ${
-              isSelected ? 'text-zinc-300' : 'text-zinc-400'
-            }`}
-          >
+          <span className="text-[10px] font-medium text-zinc-400 block uppercase tracking-wider">
             {question.type.replace('_', ' ')}
           </span>
-          <h3 className="text-xs font-semibold truncate leading-snug">
+          <h3 className="text-xs truncate leading-snug">
             {question.title}
           </h3>
         </div>
       </div>
 
       {question.required && (
-        <span
-          className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded shrink-0 ${
-            isSelected ? 'bg-white/10 text-zinc-300' : 'bg-zinc-200 text-zinc-600'
-          }`}
-        >
-          Req
+        <span className="text-[9px] font-bold text-red-600 shrink-0">
+          *
         </span>
       )}
     </div>
   );
 }
+

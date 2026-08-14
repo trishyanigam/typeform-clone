@@ -96,40 +96,56 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50/50 flex flex-col font-sans text-zinc-900">
-      {/* Header */}
+    <div className="min-h-screen bg-[#f9f9f8] flex flex-col font-sans text-[#262627]">
+      {/* Header matching Typeform Results Header */}
       {form && (
-        <header className="border-b border-zinc-200 bg-white/90 backdrop-blur-md sticky top-0 z-30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+        <header className="border-b border-[#e5e5e5] bg-white sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-4 h-14">
             <div className="flex items-center gap-3 min-w-0">
               <Link
                 href="/dashboard"
-                className="p-2 rounded-xl text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors flex items-center gap-1 shrink-0"
+                className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors flex items-center gap-1 shrink-0"
                 title="Back to My Forms"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                <span className="hidden sm:inline text-xs font-semibold">Forms</span>
+                <span className="hidden sm:inline text-xs font-medium">Forms</span>
               </Link>
 
-              <div className="h-5 w-px bg-zinc-200 shrink-0" />
+              <div className="h-4 w-px bg-zinc-200 shrink-0" />
 
               <div className="flex items-center gap-2 min-w-0">
-                <h1 className="text-base sm:text-lg font-bold text-zinc-900 tracking-tight truncate">
+                <h1 className="text-sm sm:text-base font-bold text-[#262627] tracking-tight truncate">
                   {form.title}
                 </h1>
-                <span className="px-2.5 py-0.5 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-600 text-[11px] font-semibold uppercase tracking-wider shrink-0">
-                  {totalResponses} {totalResponses === 1 ? 'response' : 'responses'}
-                </span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 shrink-0">
+            {/* Center: Top Nav Tabs */}
+            <div className="hidden md:flex items-center gap-1">
+              <Link
+                href={`/builder/${form.id}`}
+                className="px-4 py-2 text-xs font-semibold text-zinc-500 hover:text-zinc-900 transition-colors"
+              >
+                Content
+              </Link>
+              <button
+                onClick={() => setIsShareModalOpen(true)}
+                className="px-4 py-2 text-xs font-semibold text-zinc-500 hover:text-zinc-900 transition-colors"
+              >
+                Share
+              </button>
+              <span className="px-4 py-2 text-xs font-bold text-[#262627] border-b-2 border-[#262627]">
+                Results
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
               {form.status === 'published' && (
                 <button
                   onClick={() => setIsShareModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold hover:bg-emerald-100 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#044543] text-white text-xs font-semibold hover:bg-[#033433] transition-colors"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -140,12 +156,9 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
 
               <Link
                 href={`/builder/${form.id}`}
-                className="px-3.5 py-2 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors inline-flex items-center gap-1.5"
+                className="px-3.5 py-1.5 rounded-lg bg-[#262627] text-white text-xs font-semibold hover:bg-black transition-colors inline-flex items-center gap-1.5"
               >
-                <span>Open Builder</span>
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
+                <span>Edit Builder</span>
               </Link>
             </div>
           </div>
@@ -153,36 +166,58 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Sub-navigation tabs matching Typeform Insights screenshot */}
+        <div className="flex items-center gap-2 border-b border-[#e5e5e5] pb-px mb-6 overflow-x-auto">
+          <button
+            onClick={() => setActiveTab('submissions')}
+            className={`px-4 py-2.5 text-xs font-bold transition-colors border-b-2 whitespace-nowrap ${
+              activeTab === 'submissions'
+                ? 'border-[#262627] text-[#262627]'
+                : 'border-transparent text-zinc-500 hover:text-zinc-800'
+            }`}
+          >
+            Submissions ({totalResponses})
+          </button>
+
+          <button
+            onClick={() => setActiveTab('stats')}
+            className={`px-4 py-2.5 text-xs font-bold transition-colors border-b-2 whitespace-nowrap ${
+              activeTab === 'stats'
+                ? 'border-[#262627] text-[#262627]'
+                : 'border-transparent text-zinc-500 hover:text-zinc-800'
+            }`}
+          >
+            Insights & Question Stats
+          </button>
+        </div>
+
         {/* Loading State */}
         {loading && (
           <div className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm animate-pulse h-28" />
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="p-4 rounded-xl bg-white border border-zinc-200 shadow-2xs animate-pulse h-24" />
               ))}
             </div>
-            <div className="h-96 rounded-2xl bg-white border border-zinc-200 shadow-sm animate-pulse" />
+            <div className="h-80 rounded-xl bg-white border border-zinc-200 shadow-2xs animate-pulse" />
           </div>
         )}
 
         {/* Error State */}
         {!loading && error && (
-          <div className="max-w-xl mx-auto my-12 p-8 rounded-2xl bg-white border border-red-200 shadow-sm text-center">
+          <div className="max-w-xl mx-auto my-12 p-8 rounded-2xl bg-white border border-red-200 shadow-xs text-center">
             <div className="w-12 h-12 rounded-full bg-red-50 border border-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
-            <h2 className="text-lg font-bold text-zinc-900 mb-1">Failed to load responses</h2>
-            <p className="text-sm text-zinc-600 mb-6">{error}</p>
+            <h2 className="text-lg font-bold text-[#262627] mb-1">Failed to load responses</h2>
+            <p className="text-xs text-zinc-500 mb-6">{error}</p>
             <button
               onClick={loadData}
-              className="px-5 py-2.5 rounded-xl bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-800 transition-colors inline-flex items-center gap-2"
+              className="px-4 py-2 rounded-lg bg-[#262627] text-white text-xs font-semibold hover:bg-black transition-colors inline-flex items-center gap-2"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
               <span>Try again</span>
             </button>
           </div>
@@ -190,20 +225,20 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
 
         {/* Empty State */}
         {!loading && !error && totalResponses === 0 && (
-          <div className="max-w-md mx-auto my-16 p-10 rounded-2xl bg-white border border-zinc-200 shadow-sm text-center">
-            <div className="w-16 h-16 rounded-2xl bg-zinc-100 border border-zinc-200 text-zinc-400 flex items-center justify-center mx-auto mb-5">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="max-w-md mx-auto my-16 p-10 rounded-2xl bg-white border border-zinc-200 shadow-xs text-center">
+            <div className="w-14 h-14 rounded-2xl bg-zinc-100 border border-zinc-200 text-zinc-400 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-zinc-900 tracking-tight mb-1">No responses yet</h2>
-            <p className="text-sm text-zinc-500 mb-6">
-              Share your form to start collecting responses.
+            <h2 className="text-lg font-bold text-[#262627] tracking-tight mb-1">No responses yet</h2>
+            <p className="text-xs text-zinc-500 mb-6">
+              Share your published form link with respondents to begin collecting submissions.
             </p>
             <div className="flex items-center justify-center gap-3">
               <Link
                 href={`/builder/${formIdNum}`}
-                className="px-4 py-2.5 rounded-xl border border-zinc-200 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 transition-colors"
+                className="px-3.5 py-2 rounded-lg border border-zinc-200 text-xs font-semibold text-zinc-700 hover:bg-zinc-50"
               >
                 Go to Builder
               </Link>
@@ -211,7 +246,7 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
               {form?.status === 'published' && (
                 <button
                   onClick={() => setIsShareModalOpen(true)}
-                  className="px-4 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors inline-flex items-center gap-1.5"
+                  className="px-3.5 py-2 rounded-lg bg-[#262627] text-white text-xs font-semibold hover:bg-black inline-flex items-center gap-1.5"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -226,90 +261,67 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
         {/* Loaded Content */}
         {!loading && !error && totalResponses > 0 && (
           <div className="space-y-8">
-            {/* 1. Summary Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 block mb-1">
-                  Total Responses
-                </span>
-                <span className="text-3xl font-extrabold text-zinc-900">{totalResponses}</span>
+            {/* "Big Picture" Section matching Typeform Insights screenshot */}
+            <div className="bg-white p-6 rounded-2xl border border-[#e5e5e5] shadow-2xs space-y-4">
+              <h2 className="text-lg font-extrabold text-[#262627]">Big picture</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-2">
+                <div>
+                  <span className="text-xs font-bold text-zinc-400 block mb-1">Submissions</span>
+                  <span className="text-3xl font-black text-[#262627]">{totalResponses}</span>
+                </div>
+
+                <div>
+                  <span className="text-xs font-bold text-zinc-400 block mb-1">Total Questions</span>
+                  <span className="text-3xl font-black text-[#262627]">{stats.length}</span>
+                </div>
+
+                <div>
+                  <span className="text-xs font-bold text-zinc-400 block mb-1">Completion Rate</span>
+                  <span className="text-3xl font-black text-emerald-600">100%</span>
+                </div>
+
+                <div>
+                  <span className="text-xs font-bold text-zinc-400 block mb-1">Latest Response</span>
+                  <span className="text-sm font-bold text-[#262627] block mt-2 truncate">
+                    {responses.length > 0 ? formatDate(responses[0].submitted_at) : 'N/A'}
+                  </span>
+                </div>
               </div>
-
-              <div className="p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 block mb-1">
-                  Total Questions
-                </span>
-                <span className="text-3xl font-extrabold text-zinc-900">{stats.length}</span>
-              </div>
-
-              <div className="p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm">
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 block mb-1">
-                  Latest Submission
-                </span>
-                <span className="text-base font-bold text-zinc-900 block truncate">
-                  {responses.length > 0 ? formatDate(responses[0].submitted_at) : 'N/A'}
-                </span>
-              </div>
-            </div>
-
-            {/* 2. Navigation Tabs */}
-            <div className="flex items-center gap-2 border-b border-zinc-200 pb-px">
-              <button
-                onClick={() => setActiveTab('submissions')}
-                className={`px-4 py-2.5 text-xs font-bold transition-colors border-b-2 ${
-                  activeTab === 'submissions'
-                    ? 'border-zinc-900 text-zinc-900'
-                    : 'border-transparent text-zinc-500 hover:text-zinc-800'
-                }`}
-              >
-                Submissions ({responses.length})
-              </button>
-
-              <button
-                onClick={() => setActiveTab('stats')}
-                className={`px-4 py-2.5 text-xs font-bold transition-colors border-b-2 ${
-                  activeTab === 'stats'
-                    ? 'border-zinc-900 text-zinc-900'
-                    : 'border-transparent text-zinc-500 hover:text-zinc-800'
-                }`}
-              >
-                Question Insights & Stats
-              </button>
             </div>
 
             {/* TAB 1: Submissions Table */}
             {activeTab === 'submissions' && (
-              <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
+              <div className="bg-white rounded-2xl border border-[#e5e5e5] shadow-2xs overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="bg-zinc-50/80 border-b border-zinc-200 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
-                        <th className="py-3.5 px-6">Response ID</th>
-                        <th className="py-3.5 px-6">Submitted Date</th>
-                        <th className="py-3.5 px-6">Answer Preview</th>
-                        <th className="py-3.5 px-6 text-right">Action</th>
+                      <tr className="bg-zinc-50 border-b border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                        <th className="py-3 px-5">Response ID</th>
+                        <th className="py-3 px-5">Submitted Date</th>
+                        <th className="py-3 px-5">Answer Preview</th>
+                        <th className="py-3 px-5 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-100 text-xs">
+                    <tbody className="divide-y divide-zinc-100 text-xs font-medium">
                       {responses.map((resp) => {
                         const previewAnswers = resp.answers.slice(0, 3);
                         return (
                           <tr
                             key={resp.id}
-                            className="hover:bg-zinc-50/80 transition-colors cursor-pointer group"
+                            className="hover:bg-zinc-50 transition-colors cursor-pointer group"
                             onClick={() => {
                               window.location.href = `/responses/${formIdNum}/${resp.id}`;
                             }}
                           >
-                            <td className="py-4 px-6 font-bold text-zinc-900">
+                            <td className="py-3.5 px-5 font-bold text-[#262627]">
                               #{resp.id}
                             </td>
-                            <td className="py-4 px-6 text-zinc-600 font-medium">
+                            <td className="py-3.5 px-5 text-zinc-600">
                               {formatDate(resp.submitted_at)}
                             </td>
-                            <td className="py-4 px-6 text-zinc-600 max-w-md truncate">
+                            <td className="py-3.5 px-5 text-zinc-600 max-w-md truncate">
                               {previewAnswers.length > 0 ? (
-                                <span className="inline-flex gap-2 flex-wrap">
+                                <span className="inline-flex gap-1.5 flex-wrap">
                                   {previewAnswers.map((ans, idx) => (
                                     <span
                                       key={idx}
@@ -328,10 +340,10 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
                                 <span className="italic text-zinc-400">No answers</span>
                               )}
                             </td>
-                            <td className="py-4 px-6 text-right">
+                            <td className="py-3.5 px-5 text-right">
                               <Link
                                 href={`/responses/${formIdNum}/${resp.id}`}
-                                className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-900 group-hover:underline"
+                                className="inline-flex items-center gap-1 text-xs font-bold text-[#262627] group-hover:underline"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <span>View</span>
@@ -351,32 +363,32 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
 
             {/* TAB 2: Question Statistics */}
             {activeTab === 'stats' && (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {stats.map((st, idx) => (
                   <div
                     key={st.question_id}
-                    className="p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm"
+                    className="p-5 rounded-2xl bg-white border border-[#e5e5e5] shadow-2xs space-y-3"
                   >
-                    <div className="flex items-center justify-between pb-3 border-b border-zinc-100 mb-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
                       <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-0.5">
                           Question {idx + 1} &bull; {st.type.replace('_', ' ')}
                         </span>
-                        <h3 className="text-base font-bold text-zinc-900">
+                        <h3 className="text-sm font-bold text-[#262627]">
                           {st.question_title}
                         </h3>
                       </div>
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-zinc-100 text-zinc-700 border border-zinc-200 shrink-0">
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-700 border border-zinc-200 shrink-0">
                         {st.total_answers} {st.total_answers === 1 ? 'answer' : 'answers'}
                       </span>
                     </div>
 
-                    {/* Stats Visualization */}
+                    {/* Stats Visual Breakdown */}
                     {st.type === 'rating' ? (
-                      <div className="space-y-4">
-                        <div className="flex items-center gap-4 bg-zinc-50 p-4 rounded-xl border border-zinc-200/80">
+                      <div className="space-y-3 pt-1">
+                        <div className="flex items-center gap-3 bg-zinc-50 p-3 rounded-xl border border-zinc-200/80">
                           <span className="text-xs font-bold uppercase text-zinc-500">Average Rating:</span>
-                          <span className="text-2xl font-extrabold text-zinc-900">
+                          <span className="text-xl font-black text-[#262627]">
                             {st.average !== undefined && st.average !== null ? st.average : 0} / 5
                           </span>
                         </div>
@@ -389,11 +401,11 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
                                 <div key={score} className="space-y-1">
                                   <div className="flex justify-between text-xs font-medium text-zinc-700">
                                     <span>Rating {score}</span>
-                                    <span className="font-semibold text-zinc-900">{count} ({pct}%)</span>
+                                    <span className="font-bold text-[#262627]">{count} ({pct}%)</span>
                                   </div>
-                                  <div className="w-full h-2.5 rounded-full bg-zinc-100 overflow-hidden">
+                                  <div className="w-full h-2 rounded-full bg-zinc-100 overflow-hidden">
                                     <div
-                                      className="h-full bg-zinc-900 rounded-full transition-all duration-300"
+                                      className="h-full bg-[#262627] rounded-full transition-all duration-300"
                                       style={{ width: `${pct}%` }}
                                     />
                                   </div>
@@ -404,18 +416,18 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
                         )}
                       </div>
                     ) : st.counts && Object.keys(st.counts).length > 0 ? (
-                      <div className="space-y-3">
+                      <div className="space-y-2.5 pt-1">
                         {Object.entries(st.counts).map(([opt, count]) => {
                           const pct = st.total_answers > 0 ? Math.round((count / st.total_answers) * 100) : 0;
                           return (
                             <div key={opt} className="space-y-1">
                               <div className="flex justify-between text-xs font-medium text-zinc-700">
                                 <span>{opt}</span>
-                                <span className="font-semibold text-zinc-900">{count} ({pct}%)</span>
+                                <span className="font-bold text-[#262627]">{count} ({pct}%)</span>
                               </div>
-                              <div className="w-full h-2.5 rounded-full bg-zinc-100 overflow-hidden">
+                              <div className="w-full h-2 rounded-full bg-zinc-100 overflow-hidden">
                                 <div
-                                  className="h-full bg-zinc-900 rounded-full transition-all duration-300"
+                                  className="h-full bg-[#262627] rounded-full transition-all duration-300"
                                   style={{ width: `${pct}%` }}
                                 />
                               </div>
@@ -424,7 +436,7 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
                         })}
                       </div>
                     ) : (
-                      <div className="py-4 text-center">
+                      <div className="py-3 text-center">
                         <p className="text-xs text-zinc-500">
                           {st.total_answers > 0 ? `${st.total_answers} text responses collected.` : 'No answers collected yet for this question.'}
                         </p>
@@ -453,3 +465,4 @@ export default function ResponsesDashboardPage({ params }: ResponsesPageProps) {
     </div>
   );
 }
+

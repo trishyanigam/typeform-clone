@@ -61,25 +61,25 @@ export default function IndividualResponsePage({ params }: IndividualResponsePag
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50/50 flex flex-col font-sans text-zinc-900">
+    <div className="min-h-screen bg-[#f9f9f8] flex flex-col font-sans text-[#262627]">
       {/* Header */}
-      <header className="border-b border-zinc-200 bg-white/90 backdrop-blur-md sticky top-0 z-30">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+      <header className="border-b border-[#e5e5e5] bg-white sticky top-0 z-30 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4 h-14">
           <div className="flex items-center gap-3 min-w-0">
             <Link
               href={`/responses/${formIdNum}`}
-              className="p-2 rounded-xl text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors flex items-center gap-1 shrink-0"
+              className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-colors flex items-center gap-1 shrink-0"
               title="Back to Responses List"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
               <span className="hidden sm:inline text-xs font-semibold">Back to Responses</span>
             </Link>
 
-            <div className="h-5 w-px bg-zinc-200 shrink-0" />
+            <div className="h-4 w-px bg-zinc-200 shrink-0" />
 
-            <h1 className="text-base sm:text-lg font-bold text-zinc-900 tracking-tight truncate">
+            <h1 className="text-sm sm:text-base font-bold text-[#262627] tracking-tight truncate">
               Response #{responseIdNum}
             </h1>
           </div>
@@ -87,29 +87,29 @@ export default function IndividualResponsePage({ params }: IndividualResponsePag
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Loading State */}
         {loading && (
-          <div className="space-y-6 animate-pulse">
-            <div className="h-20 bg-zinc-200 rounded-2xl" />
-            <div className="h-32 bg-zinc-200 rounded-2xl" />
-            <div className="h-32 bg-zinc-200 rounded-2xl" />
+          <div className="space-y-4 animate-pulse">
+            <div className="h-16 bg-zinc-200 rounded-xl" />
+            <div className="h-28 bg-zinc-200 rounded-xl" />
+            <div className="h-28 bg-zinc-200 rounded-xl" />
           </div>
         )}
 
         {/* Error State */}
         {!loading && (error || !responseData) && (
-          <div className="max-w-md mx-auto my-12 p-8 rounded-2xl bg-white border border-red-200 shadow-sm text-center">
+          <div className="max-w-md mx-auto my-12 p-8 rounded-2xl bg-white border border-red-200 shadow-xs text-center">
             <div className="w-12 h-12 rounded-full bg-red-50 border border-red-100 text-red-600 flex items-center justify-center mx-auto mb-4">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
-            <h2 className="text-lg font-bold text-zinc-900 mb-1">Response Not Found</h2>
-            <p className="text-sm text-zinc-600 mb-6">{error || 'The requested response details could not be found.'}</p>
+            <h2 className="text-lg font-bold text-[#262627] mb-1">Response Not Found</h2>
+            <p className="text-xs text-zinc-500 mb-6">{error || 'The requested response details could not be found.'}</p>
             <Link
               href={`/responses/${formIdNum}`}
-              className="px-5 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition-colors inline-block"
+              className="px-4 py-2 rounded-lg bg-[#262627] text-white text-xs font-semibold hover:bg-black transition-colors inline-block"
             >
               Return to Responses Dashboard
             </Link>
@@ -118,51 +118,51 @@ export default function IndividualResponsePage({ params }: IndividualResponsePag
 
         {/* Response Details View */}
         {!loading && responseData && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {/* Submission Summary Metadata Card */}
-            <div className="p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="p-5 rounded-2xl bg-white border border-[#e5e5e5] shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 block mb-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-0.5">
                   Submission Summary
                 </span>
-                <h2 className="text-xl font-extrabold text-zinc-900">
+                <h2 className="text-lg sm:text-xl font-black text-[#262627]">
                   Response #{responseData.id}
                 </h2>
-                <p className="text-xs text-zinc-500 font-medium mt-1">
+                <p className="text-xs text-zinc-500 font-medium mt-0.5">
                   Submitted on {formatDate(responseData.submitted_at)}
                 </p>
               </div>
 
-              <span className="px-3 py-1 rounded-xl bg-zinc-100 border border-zinc-200 text-zinc-700 text-xs font-semibold">
+              <span className="px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-700 text-xs font-bold">
                 {responseData.answers.length} {responseData.answers.length === 1 ? 'answer' : 'answers'}
               </span>
             </div>
 
             {/* Question Breakdown List */}
-            <div className="space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 px-1">
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 px-1">
                 Answers Breakdown ({responseData.answers.length})
               </h3>
 
               {responseData.answers.map((ans, idx) => (
                 <div
                   key={ans.question_id}
-                  className="p-6 rounded-2xl bg-white border border-zinc-200 shadow-sm space-y-3"
+                  className="p-5 rounded-2xl bg-white border border-[#e5e5e5] shadow-2xs space-y-2.5"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
                       Question {idx + 1}
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
+                    <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
                       {ans.question_type.replace('_', ' ')}
                     </span>
                   </div>
 
-                  <h4 className="text-base font-bold text-zinc-900 leading-snug">
+                  <h4 className="text-sm sm:text-base font-bold text-[#262627] leading-snug">
                     {ans.question_title}
                   </h4>
 
-                  <div className="p-4 rounded-xl bg-zinc-50 border border-zinc-200/80 text-zinc-900 text-sm font-medium">
+                  <div className="p-3 rounded-xl bg-zinc-50 border border-zinc-200/80 text-[#262627] text-xs font-medium">
                     {ans.value ? (
                       <span className="whitespace-pre-wrap">{ans.value}</span>
                     ) : (
@@ -178,3 +178,4 @@ export default function IndividualResponsePage({ params }: IndividualResponsePag
     </div>
   );
 }
+

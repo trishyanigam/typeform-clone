@@ -7,6 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
     "sqlite:////home/trishya1101/typeform-clone/backend/typeform.db"
+    # "sqlite:///./typeform.db"
 )
 
 

@@ -26,7 +26,6 @@ export default function QuestionRenderer({
 }: QuestionRendererProps) {
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(null);
 
-  // Auto-focus input field on mount / question change
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -55,11 +54,11 @@ export default function QuestionRenderer({
   const ratingMax = question.settings?.max || 5;
 
   return (
-    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center min-h-[55vh] py-6 px-4">
+    <div className="w-full max-w-2xl mx-auto flex flex-col justify-center min-h-[50vh] py-6 px-4">
       {/* Question Number Badge & Title */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-bold text-zinc-900 bg-zinc-100 px-2 py-0.5 rounded border border-zinc-200">
+          <span className="text-xs font-bold text-white bg-[#262627] px-2 py-0.5 rounded">
             {question.position} &rarr;
           </span>
           {question.required && (
@@ -69,7 +68,7 @@ export default function QuestionRenderer({
           )}
         </div>
 
-        <h2 className="text-2xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight leading-tight">
+        <h2 className="text-2xl sm:text-4xl font-extrabold text-[#262627] tracking-tight leading-tight">
           {question.title}
         </h2>
 
@@ -91,7 +90,7 @@ export default function QuestionRenderer({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your answer here..."
-            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
+            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-[#262627] bg-transparent text-[#262627] placeholder:text-zinc-300 focus:outline-none transition-colors"
           />
         )}
 
@@ -105,10 +104,10 @@ export default function QuestionRenderer({
               onKeyDown={handleKeyDown}
               placeholder="Type your response here..."
               rows={4}
-              className="w-full text-lg font-medium p-4 border-2 border-zinc-200 rounded-2xl bg-zinc-50/50 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-900 focus:bg-white transition-all resize-none shadow-sm"
+              className="w-full text-base sm:text-lg font-medium p-4 border border-zinc-200 rounded-xl bg-zinc-50/50 text-[#262627] placeholder:text-zinc-400 focus:outline-none focus:border-[#262627] focus:bg-white transition-all resize-none shadow-2xs"
             />
-            <p className="mt-2.5 text-xs font-medium text-zinc-400">
-              Press <kbd className="px-1.5 py-0.5 bg-zinc-100 border border-zinc-300 rounded text-zinc-700 font-mono text-[10px]">Ctrl</kbd> + <kbd className="px-1.5 py-0.5 bg-zinc-100 border border-zinc-300 rounded text-zinc-700 font-mono text-[10px]">Enter ↵</kbd> to submit answer
+            <p className="mt-2 text-xs font-medium text-zinc-400">
+              Press <kbd className="px-1 py-0.5 bg-zinc-100 border border-zinc-300 rounded text-zinc-700 font-mono text-[10px]">Ctrl</kbd> + <kbd className="px-1 py-0.5 bg-zinc-100 border border-zinc-300 rounded text-zinc-700 font-mono text-[10px]">Enter ↵</kbd> to submit answer
             </p>
           </div>
         )}
@@ -122,7 +121,7 @@ export default function QuestionRenderer({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="name@example.com"
-            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
+            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-[#262627] bg-transparent text-[#262627] placeholder:text-zinc-300 focus:outline-none transition-colors"
           />
         )}
 
@@ -135,13 +134,13 @@ export default function QuestionRenderer({
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="0"
-            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-zinc-900 bg-transparent text-zinc-900 placeholder:text-zinc-300 focus:outline-none focus:border-black transition-colors"
+            className="w-full text-xl sm:text-3xl font-semibold py-3 px-1 border-b-2 border-[#262627] bg-transparent text-[#262627] placeholder:text-zinc-300 focus:outline-none transition-colors"
           />
         )}
 
         {/* 5. Multiple Choice */}
         {question.type === 'multiple_choice' && (
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {options.map((opt: string, idx: number) => {
               const letter = ALPHABET[idx] || `${idx + 1}`;
               const isSelected = value === opt;
@@ -150,14 +149,14 @@ export default function QuestionRenderer({
                   key={idx}
                   type="button"
                   onClick={() => onChange(opt)}
-                  className={`w-full p-4 rounded-2xl border-2 text-left flex items-center gap-4 transition-all duration-150 group ${
+                  className={`w-full p-3.5 rounded-xl border text-left flex items-center gap-3 transition-all duration-150 group cursor-pointer ${
                     isSelected
-                      ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
-                      : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50/80 text-zinc-900'
+                      ? 'border-[#262627] bg-[#262627] text-white shadow-sm'
+                      : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50/80 text-[#262627]'
                   }`}
                 >
                   <span
-                    className={`w-8 h-8 rounded-xl font-bold text-xs flex items-center justify-center border shrink-0 transition-colors ${
+                    className={`w-7 h-7 rounded-md font-bold text-xs flex items-center justify-center border shrink-0 transition-colors ${
                       isSelected
                         ? 'bg-white/20 text-white border-white/30'
                         : 'bg-zinc-100 text-zinc-700 border-zinc-200 group-hover:bg-zinc-200'
@@ -165,7 +164,7 @@ export default function QuestionRenderer({
                   >
                     {letter}
                   </span>
-                  <span className="text-base font-semibold">{opt}</span>
+                  <span className="text-sm sm:text-base font-bold">{opt}</span>
                 </button>
               );
             })}
@@ -178,7 +177,7 @@ export default function QuestionRenderer({
             ref={inputRef as React.RefObject<HTMLSelectElement>}
             value={value || ''}
             onChange={(e) => onChange(e.target.value)}
-            className="w-full text-lg font-semibold p-4 rounded-2xl border-2 border-zinc-200 bg-white text-zinc-900 focus:outline-none focus:border-zinc-900 shadow-sm transition-all"
+            className="w-full text-base sm:text-lg font-semibold p-3.5 rounded-xl border border-zinc-200 bg-white text-[#262627] focus:outline-none focus:border-[#262627] shadow-2xs cursor-pointer"
           >
             <option value="">Select an option...</option>
             {options.map((opt: string, idx: number) => (
@@ -191,7 +190,7 @@ export default function QuestionRenderer({
 
         {/* 7. Yes / No */}
         {question.type === 'yes_no' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               { label: 'Yes', val: 'yes', keyHint: 'Y' },
               { label: 'No', val: 'no', keyHint: 'N' },
@@ -202,15 +201,15 @@ export default function QuestionRenderer({
                   key={item.val}
                   type="button"
                   onClick={() => onChange(item.val)}
-                  className={`p-5 rounded-2xl border-2 text-left flex items-center justify-between transition-all duration-150 group ${
+                  className={`p-4 rounded-xl border text-left flex items-center justify-between transition-all duration-150 group cursor-pointer ${
                     isSelected
-                      ? 'border-zinc-900 bg-zinc-900 text-white shadow-md'
-                      : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50/80 text-zinc-900'
+                      ? 'border-[#262627] bg-[#262627] text-white shadow-sm'
+                      : 'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50/80 text-[#262627]'
                   }`}
                 >
-                  <span className="text-lg font-bold">{item.label}</span>
+                  <span className="text-base font-extrabold">{item.label}</span>
                   <span
-                    className={`w-8 h-8 rounded-xl font-bold text-xs flex items-center justify-center border ${
+                    className={`w-7 h-7 rounded-md font-bold text-xs flex items-center justify-center border ${
                       isSelected
                         ? 'bg-white/20 text-white border-white/30'
                         : 'bg-zinc-100 text-zinc-700 border-zinc-200 group-hover:bg-zinc-200'
@@ -227,7 +226,7 @@ export default function QuestionRenderer({
         {/* 8. Rating */}
         {question.type === 'rating' && (
           <div>
-            <div className="flex items-center gap-2.5 sm:gap-3.5 flex-wrap">
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               {Array.from({ length: ratingMax }, (_, i) => i + 1).map((starVal) => {
                 const isSelected = Number(value) === starVal;
                 return (
@@ -235,9 +234,9 @@ export default function QuestionRenderer({
                     key={starVal}
                     type="button"
                     onClick={() => onChange(starVal)}
-                    className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border-2 font-extrabold text-lg flex items-center justify-center transition-all duration-150 ${
+                    className={`w-11 h-11 sm:w-13 sm:h-13 rounded-xl border font-extrabold text-base sm:text-lg flex items-center justify-center transition-all duration-150 cursor-pointer ${
                       isSelected
-                        ? 'border-zinc-900 bg-zinc-900 text-white shadow-md scale-105'
+                        ? 'border-[#262627] bg-[#262627] text-white shadow-sm scale-105'
                         : 'border-zinc-200 bg-white text-zinc-800 hover:border-zinc-400 hover:bg-zinc-50'
                     }`}
                   >
@@ -246,7 +245,7 @@ export default function QuestionRenderer({
                 );
               })}
             </div>
-            <p className="mt-3 text-xs font-medium text-zinc-400">
+            <p className="mt-2.5 text-xs font-medium text-zinc-400">
               Select rating scale from 1 to {ratingMax}
             </p>
           </div>
@@ -255,7 +254,7 @@ export default function QuestionRenderer({
 
       {/* Inline Validation Error */}
       {validationError && (
-        <div className="mb-4 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-2 animate-fade-in">
+        <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-semibold flex items-center gap-2 animate-fade-in">
           <svg className="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
@@ -264,12 +263,12 @@ export default function QuestionRenderer({
       )}
 
       {/* Bottom Action Button: OK / Submit */}
-      <div className="flex items-center gap-3 pt-4">
+      <div className="flex items-center gap-3 pt-2">
         <button
           type="button"
           onClick={onNext}
           disabled={submitting}
-          className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-zinc-900 text-white font-bold text-base hover:bg-black active:scale-[0.98] transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:ring-offset-2 disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#262627] text-white font-bold text-sm hover:bg-black active:scale-[0.98] transition-all shadow-xs disabled:opacity-50 cursor-pointer"
         >
           {submitting ? (
             <>
@@ -280,14 +279,14 @@ export default function QuestionRenderer({
             <>
               <span>Submit</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
             </>
           ) : (
             <>
               <span>OK</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
               </svg>
             </>
           )}
@@ -302,3 +301,4 @@ export default function QuestionRenderer({
     </div>
   );
 }
+
